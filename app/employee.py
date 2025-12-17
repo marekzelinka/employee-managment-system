@@ -1,24 +1,9 @@
-"""
-Employee management system.
-"""
-
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
 
-FIXED_VACATION_DAYS_PAYOUT = (
-    5  # The fixed number of vacation days that can be paid out.
-)
-
-
-class VacationDaysShortageError(Exception):
-    """Custom error that is raised when not enough vacations days are available."""
-
-    def __init__(self, requested_days: int, remaining_days: int, message: str) -> None:
-        self.requested_days = requested_days
-        self.remaining_days = remaining_days
-        self.message = message
-        super().__init__(message)
+from config import FIXED_VACATION_DAYS_PAYOUT
+from exceptions import VacationDaysShortageError
 
 
 class Role(Enum):
@@ -93,43 +78,3 @@ class SalariedEmployee(Employee):
         print(
             f"Paying employee {self.name} a monthly salary of ${self.monthly_salary}."
         )
-
-
-class Company:
-    """Models a company with employees."""
-
-    def __init__(self) -> None:
-        self.employees: list[Employee] = []
-
-    def add_employee(self, employee: Employee) -> None:
-        """Add an employee to the list of employees."""
-        self.employees.append(employee)
-
-    def find_employees(self, role: Role) -> list[Employee]:
-        """Find all employees with a particular role in the employee list."""
-        return [employee for employee in self.employees if employee.role is role]
-
-
-def main():
-    company = Company()
-
-    # Add employees to the company
-    company.add_employee(SalariedEmployee(name="Louis", role=Role.MANAGER))
-    company.add_employee(HourlyEmployee(name="Brenda", role=Role.PRESIDENT))
-    company.add_employee(HourlyEmployee(name="Tim", role=Role.INTERN))
-
-    # Print out employees by role
-    print(company.find_employees(role=Role.VICEPRESIDENT))
-    print(company.find_employees(role=Role.MANAGER))
-    print(company.find_employees(role=Role.INTERN))
-
-    # Pay company employee
-    company.employees[0].pay()
-
-    # Let employee on a vacation
-    company.employees[0].take_time_off()
-    company.employees[0].take_time_off(days=4)
-
-
-if __name__ == "__main__":
-    main()
