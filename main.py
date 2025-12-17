@@ -3,10 +3,22 @@ Employee management system.
 """
 
 from dataclasses import dataclass
+from enum import Enum, auto
 
 FIXED_VACATION_DAYS_PAYOUT = (
     5  # The fixed number of vacation days that can be paid out.
 )
+
+
+class Role(Enum):
+    """Emyloyee roles."""
+
+    PRESIDENT = auto()
+    VICEPRESIDENT = auto()
+    MANAGER = auto()
+    LEAD = auto()
+    WORKER = auto()
+    INTERN = auto()
 
 
 @dataclass
@@ -14,7 +26,7 @@ class Employee:
     """Models a generic company employee."""
 
     name: str
-    role: str
+    role: Role
     vacation_days: int = 25
 
     def take_a_holiday(self, payout: bool) -> None:
@@ -64,29 +76,9 @@ class Company:
         """Add an employee to the list of employees."""
         self.employees.append(employee)
 
-    def find_managers(self) -> list[Employee]:
-        """Find all manager employees."""
-        managers: list[Employee] = []
-        for employee in self.employees:
-            if employee.role == "manager":
-                managers.append(employee)
-        return managers
-
-    def find_vice_presidents(self) -> list[Employee]:
-        """Find all vice-president employees."""
-        vice_presidents: list[Employee] = []
-        for employee in self.employees:
-            if employee.role == "vice_president":
-                vice_presidents.append(employee)
-        return vice_presidents
-
-    def find_interns(self) -> list[Employee]:
-        """Find all interns."""
-        interns: list[Employee] = []
-        for employee in self.employees:
-            if employee.role == "intern":
-                interns.append(employee)
-        return interns
+    def find_employees(self, role: Role) -> list[Employee]:
+        """Find all employees with a particular role in the employee list."""
+        return [employee for employee in self.employees if employee.role is role]
 
     def pay_employee(self, employee: Employee) -> None:
         """Pay an employee."""
@@ -105,20 +97,15 @@ def main():
 
     company = Company()
 
-    # Define our employees
-    louis = SalariedEmployee(name="Louis", role="manager")
-    brenda = HourlyEmployee(name="Brenda", role="president")
-    tim = HourlyEmployee(name="Tim", role="intern")
-
-    # Add our employees to the company
-    company.add_employee(louis)
-    company.add_employee(brenda)
-    company.add_employee(tim)
+    # Add employees to the company
+    company.add_employee(SalariedEmployee(name="Louis", role=Role.MANAGER))
+    company.add_employee(HourlyEmployee(name="Brenda", role=Role.PRESIDENT))
+    company.add_employee(HourlyEmployee(name="Tim", role=Role.INTERN))
 
     # Print out employees by role
-    print(company.find_managers())
-    print(company.find_vice_presidents())
-    print(company.find_interns())
+    print(company.find_employees(role=Role.VICEPRESIDENT))
+    print(company.find_employees(role=Role.MANAGER))
+    print(company.find_employees(role=Role.INTERN))
 
     # Pay company employee
     company.pay_employee(company.employees[0])
