@@ -2,8 +2,8 @@
 Employee management system.
 """
 
-from company import Company
-from employee import HourlyEmployee, Role, SalariedEmployee
+from employees.company import Company
+from employees.employee import HourlyEmployee, Role, SalariedEmployee
 
 
 def main():

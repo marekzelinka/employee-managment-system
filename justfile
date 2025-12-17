@@ -1,5 +1,5 @@
 start:
-    uv run app/main.py
+    uv run main.py
 
 typecheck:
     uv run ty check

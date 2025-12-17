@@ -1,4 +1,4 @@
-from employee import Employee, Role
+from employees.employee import Employee, Role
 
 
 class Company:

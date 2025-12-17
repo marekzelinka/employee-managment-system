@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from config import FIXED_VACATION_DAYS_PAYOUT
-from exceptions import VacationDaysShortageError
+from employees.config import FIXED_VACATION_DAYS_PAYOUT
+from employees.exceptions import VacationDaysShortageError
 
 
 class Role(Enum):
