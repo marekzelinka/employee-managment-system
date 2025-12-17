@@ -77,10 +77,9 @@ class HourlyEmployee(Employee):
     hours_worked: int = 10
 
     def pay(self) -> None:
-        # TODO: format currency
         print(
             f"Paying employee {self.name} a hourly rate of \
-            ${self.hourly_rate} for {self.hours_worked} hours.."
+            ${self.hourly_rate} for {self.hours_worked} hours."
         )
 
 
@@ -112,8 +111,6 @@ class Company:
 
 
 def main():
-    """Main function."""
-
     company = Company()
 
     # Add employees to the company
