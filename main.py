@@ -43,6 +43,7 @@ class Employee(ABC):
     @abstractmethod
     def pay(self) -> None:
         """Method to call when paying an employee."""
+        ...
 
     # TODO: allow taking holiday spanning multiple days.
     def take_a_holiday(self) -> None:
