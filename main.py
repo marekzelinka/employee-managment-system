@@ -45,20 +45,19 @@ class Employee(ABC):
         """Method to call when paying an employee."""
         ...
 
-    # TODO: allow taking holiday spanning multiple days.
-    def take_a_holiday(self) -> None:
-        """Let the employee take a single holiday."""
-        if self.vacation_days < 1:
+    def take_time_off(self, days: int = 1) -> None:
+        """Let the employee take a `n` days of paid time off, where n defaults 1."""
+        if self.vacation_days < days:
             raise VacationDaysShortageError(
-                requested_days=1,
+                requested_days=days,
                 remaining_days=self.vacation_days,
-                message="You don't have any holidays left. Sorry...",
+                message="You don't have any paid time off days left. Sorry...",
             )
-        self.vacation_days -= 1
-        print("Have fun on your holiday. Don't forget to check your emails!")
+        self.vacation_days -= days
+        print(f"Have fun on your vacation, {self.name}.")
 
     def payout_a_holiday(self) -> None:
-        """Let the employee get paid for unused holidays"""
+        """Let the employee get paid for unused holidays."""
         # Check if there are enough vacation days left for a payout
         if self.vacation_days < FIXED_VACATION_DAYS_PAYOUT:
             raise VacationDaysShortageError(
@@ -131,7 +130,8 @@ def main():
     company.employees[0].pay()
 
     # Let employee on a vacation
-    company.employees[0].take_a_holiday()
+    company.employees[0].take_time_off()
+    company.employees[0].take_time_off(days=4)
 
 
 if __name__ == "__main__":
