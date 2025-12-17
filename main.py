@@ -10,6 +10,16 @@ FIXED_VACATION_DAYS_PAYOUT = (
 )
 
 
+class VacationDaysShortageError(Exception):
+    """Custom error that is raised when not enough vacations days are available."""
+
+    def __init__(self, requested_days: int, remaining_days: int, message: str) -> None:
+        self.requested_days = requested_days
+        self.remaining_days = remaining_days
+        self.message = message
+        super().__init__(message)
+
+
 class Role(Enum):
     """Emyloyee roles."""
 
@@ -34,8 +44,10 @@ class Employee:
         if payout:
             # Check if there are enough vacation days left for a payout
             if self.vacation_days < FIXED_VACATION_DAYS_PAYOUT:
-                raise ValueError(
-                    f"You don't have enought holidays left over for a payout. Remaining holidays: {self.vacation_days}."
+                raise VacationDaysShortageError(
+                    requested_days=FIXED_VACATION_DAYS_PAYOUT,
+                    remaining_days=self.vacation_days,
+                    message="You don't have enought holidays left over for a payout.",
                 )
             try:
                 self.vacation_days -= FIXED_VACATION_DAYS_PAYOUT
@@ -44,8 +56,10 @@ class Employee:
                 pass
         else:
             if self.vacation_days < 1:
-                raise ValueError(
-                    "You don't have any holidays left. Now back to work, you!"
+                raise VacationDaysShortageError(
+                    requested_days=1,
+                    remaining_days=self.vacation_days,
+                    message="You don't have any holidays left. Now back to work, you!",
                 )
             self.vacation_days -= 1
             print("Have fun on your holiday. Don't forget to check your emails!")
