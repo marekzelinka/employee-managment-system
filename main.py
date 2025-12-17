@@ -39,30 +39,29 @@ class Employee:
     role: Role
     vacation_days: int = 25
 
-    def take_a_holiday(self, payout: bool) -> None:
-        """Let the employee take a single holiday, or pay ou 5 holidays."""
-        if payout:
-            # Check if there are enough vacation days left for a payout
-            if self.vacation_days < FIXED_VACATION_DAYS_PAYOUT:
-                raise VacationDaysShortageError(
-                    requested_days=FIXED_VACATION_DAYS_PAYOUT,
-                    remaining_days=self.vacation_days,
-                    message="You don't have enought holidays left over for a payout.",
-                )
-            try:
-                self.vacation_days -= FIXED_VACATION_DAYS_PAYOUT
-                print(f"Paying out a holiday. Holidays left: {self.vacation_days}.")
-            except Exception:
-                pass
-        else:
-            if self.vacation_days < 1:
-                raise VacationDaysShortageError(
-                    requested_days=1,
-                    remaining_days=self.vacation_days,
-                    message="You don't have any holidays left. Now back to work, you!",
-                )
-            self.vacation_days -= 1
-            print("Have fun on your holiday. Don't forget to check your emails!")
+    # TODO: allow taking holiday spanning multiple days.
+    def take_a_holiday(self) -> None:
+        """Let the employee take a single holiday."""
+        if self.vacation_days < 1:
+            raise VacationDaysShortageError(
+                requested_days=1,
+                remaining_days=self.vacation_days,
+                message="You don't have any holidays left. Sorry...",
+            )
+        self.vacation_days -= 1
+        print("Have fun on your holiday. Don't forget to check your emails!")
+
+    def payout_a_holiday(self) -> None:
+        """Let the employee get paid for unused holidays"""
+        # Check if there are enough vacation days left for a payout
+        if self.vacation_days < FIXED_VACATION_DAYS_PAYOUT:
+            raise VacationDaysShortageError(
+                requested_days=FIXED_VACATION_DAYS_PAYOUT,
+                remaining_days=self.vacation_days,
+                message="You don't have enought holidays left over for a payout.",
+            )
+        self.vacation_days -= FIXED_VACATION_DAYS_PAYOUT
+        print(f"Paying out a holiday. Holidays left: {self.vacation_days}.")
 
 
 @dataclass
@@ -125,7 +124,7 @@ def main():
     company.pay_employee(company.employees[0])
 
     # Let employee on a vacation
-    company.employees[0].take_a_holiday(False)
+    company.employees[0].take_a_holiday()
 
 
 if __name__ == "__main__":
