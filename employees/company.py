@@ -11,6 +11,17 @@ class Company:
         """Add an employee to the list of employees."""
         self.employees.append(employee)
 
-    def find_employees(self, role: Role) -> list[Employee]:
-        """Find all employees with a particular role in the employee list."""
-        return [employee for employee in self.employees if employee.role is role]
+    def find_employees(
+        self, role: Role | None = None, name: str | None = None
+    ) -> list[Employee]:
+        """Find all employees with a particular role and/or name in the employee list."""
+        filtered = self.employees
+        if role:
+            filtered = [employee for employee in filtered if employee.role is role]
+        if name:
+            filtered = [
+                employee
+                for employee in filtered
+                if name.lower() in employee.name.lower()
+            ]
+        return filtered

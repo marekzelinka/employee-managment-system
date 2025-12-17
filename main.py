@@ -18,6 +18,7 @@ def main():
     print(company.find_employees(role=Role.VICEPRESIDENT))
     print(company.find_employees(role=Role.MANAGER))
     print(company.find_employees(role=Role.INTERN))
+    print(company.find_employees(role=Role.PRESIDENT, name="Obama"))
 
     # Pay company employee
     company.employees[0].pay()

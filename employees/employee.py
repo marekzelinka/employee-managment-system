@@ -2,8 +2,19 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from employees.config import FIXED_VACATION_DAYS_PAYOUT
-from employees.exceptions import VacationDaysShortageError
+FIXED_VACATION_DAYS_PAYOUT = (
+    5  # The fixed number of vacation days that can be paid out.
+)
+
+
+class VacationDaysShortageError(Exception):
+    """Custom error that is raised when not enough vacations days are available."""
+
+    def __init__(self, requested_days: int, remaining_days: int, message: str) -> None:
+        self.requested_days = requested_days
+        self.remaining_days = remaining_days
+        self.message = message
+        super().__init__(message)
 
 
 class Role(Enum):
