@@ -15,13 +15,9 @@ class Company:
         self, role: Role | None = None, name: str | None = None
     ) -> list[Employee]:
         """Find all employees with a particular role and/or name in the employee list."""
-        filtered = self.employees
-        if role:
-            filtered = [employee for employee in filtered if employee.role is role]
-        if name:
-            filtered = [
-                employee
-                for employee in filtered
-                if name.lower() in employee.name.lower()
-            ]
-        return filtered
+        return [
+            employee
+            for employee in self.employees
+            if (role is None or employee.role is role)
+            and (name is None or name.lower() in employee.name.lower())
+        ]
